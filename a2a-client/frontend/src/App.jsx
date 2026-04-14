@@ -2,12 +2,16 @@ import React, { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useChatState } from './hooks/useChatState';
 import { useSocket } from './hooks/useSocket';
+import { AuthProvider, useAuth } from './hooks/useAuth';
 import Sidebar from './components/Sidebar';
 import ChatArea from './components/ChatArea';
+import LoginPage from './components/LoginPage';
 import * as api from './services/api';
 import './App.css';
 
-export default function App() {
+function AppContent() {
+  const { user, isLoading, isAuthenticated, isAdmin, logout } = useAuth();
+
   const {
     agentUrl,
     contextId,
@@ -32,7 +36,6 @@ export default function App() {
   const [error, setError] = React.useState(null);
   const [agents, setAgents] = React.useState([]);
 
-  // Refs to avoid stale closures — always hold the latest values
   const contextIdRef = useRef(contextId);
   const activeTaskIdRef = useRef(activeTaskId);
   const agentUrlRef = useRef(agentUrl);
@@ -59,7 +62,6 @@ export default function App() {
       connect(newContextId, onProgressUpdate);
       const sessionList = await api.listSessions();
       setSessions(sessionList);
-      // Refresh agents list
       api.listAgents().then(setAgents).catch(() => {});
     } catch (err) {
       setError(err.message || 'Failed to connect to agent');
@@ -76,11 +78,11 @@ export default function App() {
         userText: text,
         taskId: activeTaskIdRef.current,
         agentName: agentCardRef.current?.name,
+        webhookContextId: contextIdRef.current,
       });
       addMessage({ role: 'agent', text: result.text });
       setAgentStatus(null);
 
-      // Update contextId if the server returned a different one
       if (result.contextId && result.contextId !== contextIdRef.current) {
         setContextId(result.contextId);
         contextIdRef.current = result.contextId;
@@ -134,13 +136,26 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     api.listSessions()
       .then((sessionList) => setSessions(sessionList))
       .catch(() => {});
     api.listAgents()
       .then((agentList) => setAgents(agentList))
       .catch(() => {});
-  }, []);
+  }, [isAuthenticated]);
+
+  if (isLoading) {
+    return (
+      <div className="app-loading">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="app-container">
@@ -152,6 +167,9 @@ export default function App() {
         sessions={sessions}
         agents={agents}
         error={error}
+        user={user}
+        onLogout={logout}
+        isAdmin={isAdmin}
       />
       <ChatArea
         messages={messages}
@@ -161,5 +179,13 @@ export default function App() {
         contextId={contextId}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }

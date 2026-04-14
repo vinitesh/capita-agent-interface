@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import SessionList from './SessionList';
 import AgentList from './AgentList';
+import UserManagement from './UserManagement';
 
 const STORAGE_KEY = 'a2a-agent-url';
 
-export default function Sidebar({ agentCard, onConnect, onNewChat, onSessionSelect, sessions, agents, error }) {
+export default function Sidebar({ agentCard, onConnect, onNewChat, onSessionSelect, sessions, agents, error, user, onLogout, isAdmin }) {
   const [urlInput, setUrlInput] = useState(() => {
     return localStorage.getItem(STORAGE_KEY) || '';
   });
   const [showAgentList, setShowAgentList] = useState(false);
+  const [showUserMgmt, setShowUserMgmt] = useState(false);
 
   const handleConnect = () => {
     if (urlInput.trim()) {
@@ -27,7 +29,14 @@ export default function Sidebar({ agentCard, onConnect, onNewChat, onSessionSele
 
   return (
     <div className="sidebar">
-      <h2 className="sidebar-title">A2A Chat</h2>
+      <h2 className="sidebar-title">Capita Agent Interface</h2>
+
+      {user && (
+        <div className="sidebar-user-info">
+          <span className="sidebar-username">Logged in as: {user.username}</span>
+          <button className="sidebar-logout-btn" onClick={onLogout}>Logout</button>
+        </div>
+      )}
 
       <div className="sidebar-connect">
         <input
@@ -79,6 +88,18 @@ export default function Sidebar({ agentCard, onConnect, onNewChat, onSessionSele
       )}
 
       <SessionList sessions={sessions} onSessionSelect={onSessionSelect} />
+
+      {isAdmin && (
+        <>
+          <button
+            className="user-mgmt-toggle-btn"
+            onClick={() => setShowUserMgmt(!showUserMgmt)}
+          >
+            {showUserMgmt ? 'Hide User Management' : 'User Management'}
+          </button>
+          {showUserMgmt && <UserManagement currentUser={user.username} />}
+        </>
+      )}
     </div>
   );
 }

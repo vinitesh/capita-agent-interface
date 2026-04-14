@@ -507,3 +507,221 @@ body {
   gap: 8px;
   margin-bottom: 8px;
 }
+
+/* Login Page */
+.login-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--capita-dark);
+}
+
+.login-card {
+  background: var(--capita-white);
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.login-title {
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--capita-dark);
+  margin-bottom: 24px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--capita-border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.92rem;
+  box-sizing: border-box;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--capita-accent);
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--capita-accent);
+  color: var(--capita-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.login-btn:hover {
+  background: #d63050;
+}
+
+.login-error {
+  color: #e94560;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+/* Loading state */
+.app-loading {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--capita-dark);
+  color: var(--capita-white);
+  font-size: 1.1rem;
+}
+
+/* Sidebar user info */
+.sidebar-user-info {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-username {
+  font-size: 0.85rem;
+  color: var(--capita-white);
+}
+
+.sidebar-logout-btn {
+  padding: 4px 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.sidebar-logout-btn:hover {
+  color: var(--capita-white);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* User Management */
+.user-mgmt {
+  padding: 12px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-mgmt-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+}
+
+.user-mgmt-table {
+  width: 100%;
+  font-size: 0.8rem;
+  border-collapse: collapse;
+}
+
+.user-mgmt-table th,
+.user-mgmt-table td {
+  padding: 6px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.user-mgmt-table th {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+}
+
+.user-mgmt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.user-mgmt-input {
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--capita-white);
+  font-size: 0.85rem;
+}
+
+.user-mgmt-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.user-mgmt-select {
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--capita-white);
+  font-size: 0.85rem;
+}
+
+.user-mgmt-add-btn {
+  padding: 8px;
+  background: var(--capita-accent);
+  color: var(--capita-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.user-mgmt-add-btn:hover {
+  background: #d63050;
+}
+
+.user-mgmt-remove-btn {
+  background: transparent;
+  color: #ff6b6b;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.user-mgmt-remove-btn:hover {
+  color: #ff4444;
+}
+
+.user-mgmt-toggle-btn {
+  padding: 5px 10px;
+  margin: 12px 20px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  display: block;
+  width: calc(100% - 40px);
+  text-align: center;
+}
+
+.user-mgmt-toggle-btn:hover {
+  color: var(--capita-white);
+  border-color: rgba(255, 255, 255, 0.5);
+}
