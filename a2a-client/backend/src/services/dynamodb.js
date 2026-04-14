@@ -117,4 +117,21 @@ async function listAgents() {
   return items;
 }
 
-module.exports = { saveMessages, listSessions, getSession, saveAgent, listAgents };
+// Get one previously connected agent by URL
+async function getAgentByUrl(agentUrl) {
+  const command = new GetCommand({
+    TableName: AGENT_HISTORY_TABLE,
+    Key: { agentUrl },
+  });
+  const result = await docClient.send(command);
+  return result.Item || null;
+}
+
+module.exports = {
+  saveMessages,
+  listSessions,
+  getSession,
+  saveAgent,
+  listAgents,
+  getAgentByUrl,
+};

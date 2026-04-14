@@ -40,13 +40,14 @@ function AppContent() {
   const activeTaskIdRef = useRef(activeTaskId);
   const agentUrlRef = useRef(agentUrl);
   const agentCardRef = useRef(agentCard);
+  const agentNameRef = useRef(null);
   // webhookContextId is our local Socket.io room ID — stays fixed for the whole chat session
   const webhookContextIdRef = useRef(null);
 
   useEffect(() => { contextIdRef.current = contextId; }, [contextId]);
   useEffect(() => { activeTaskIdRef.current = activeTaskId; }, [activeTaskId]);
   useEffect(() => { agentUrlRef.current = agentUrl; }, [agentUrl]);
-  useEffect(() => { agentCardRef.current = agentCard; }, [agentCard]);
+  useEffect(() => { agentCardRef.current = agentCard; agentNameRef.current = agentCard?.name || null; }, [agentCard]);
 
   const onProgressUpdate = (data) => {
     setAgentStatus(data.status);
@@ -57,6 +58,8 @@ function AppContent() {
       setError(null);
       const card = await api.discoverAgent(urlInput);
       setAgentCard(card);
+      agentNameRef.current = card.name || null;
+      agentUrlRef.current = card.url || urlInput;
       setAgentUrl(card.url || urlInput);
       const newContextId = uuidv4();
       setContextId(newContextId);
@@ -80,7 +83,7 @@ function AppContent() {
         contextId: contextIdRef.current,
         userText: text,
         taskId: activeTaskIdRef.current,
-        agentName: agentCardRef.current?.name || agentCard?.name || 'Unknown Agent',
+        agentName: agentNameRef.current || agentCardRef.current?.name || 'Unknown Agent',
         webhookContextId: webhookContextIdRef.current,
       });
       addMessage({ role: 'agent', text: result.text });
@@ -114,6 +117,7 @@ function AppContent() {
       activeTaskIdRef.current = session.activeTaskId || null;
       const card = await api.discoverAgent(session.agentUrl);
       setAgentCard(card);
+      agentNameRef.current = card.name || null;
       agentUrlRef.current = session.agentUrl;
     } catch (err) {
       setError(err.message || 'Failed to load session');
@@ -135,6 +139,7 @@ function AppContent() {
       messages: [],
       activeTaskId: null,
       isInputRequired: false,
+      agentCard: agentCardRef.current,
     });
     connect(newContextId, onProgressUpdate);
     api.listSessions().then(setSessions).catch(() => {});

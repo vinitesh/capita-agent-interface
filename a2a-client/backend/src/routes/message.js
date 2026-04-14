@@ -4,6 +4,12 @@ const dynamodb = require('../services/dynamodb');
 
 const router = express.Router();
 
+function normalizeAgentName(name) {
+  if (typeof name !== 'string') return null;
+  const trimmed = name.trim();
+  return trimmed ? trimmed : null;
+}
+
 // POST / — Send a message to an A2A agent and persist the exchange
 router.post('/', async (req, res) => {
   const { agentUrl, contextId, userText, taskId, agentName, webhookContextId } = req.body;
@@ -27,10 +33,16 @@ router.post('/', async (req, res) => {
 
   // Persist the exchange to DynamoDB using webhookContextId as the session key
   try {
+    let resolvedAgentName = normalizeAgentName(agentName);
+    if (!resolvedAgentName) {
+      const knownAgent = await dynamodb.getAgentByUrl(agentUrl);
+      resolvedAgentName = normalizeAgentName(knownAgent?.agentName);
+    }
+
     await dynamodb.saveMessages({
       contextId: webhookContextId || contextId,
       agentUrl,
-      agentName: agentName || 'Unknown Agent',
+      agentName: resolvedAgentName || 'Unknown Agent',
       userMessage: userText,
       agentMessage: result.text,
       activeTaskId: result.state === 'input-required' ? result.taskId : null,
