@@ -11,15 +11,20 @@ const { v4: uuidv4 } = require('uuid');
  * - For multi-turn: taskId goes in the message object, contextId in params
  * - Parts use { kind: "text", text: "..." } format in v0.3
  */
-async function sendMessage({ agentUrl, contextId, taskId, userText }) {
+async function sendMessage({ agentUrl, contextId, taskId, userText, webhookContextId }) {
   const messageId = `msg-${Date.now()}-${uuidv4().slice(0, 10)}`;
+
+  // Append webhook context ID to the message so the agent's MCP tools can post updates
+  const textWithContext = webhookContextId
+    ? `${userText}\n\nNOTE: For any tool requesting a context id please pass ${webhookContextId}`
+    : userText;
 
   // Build the message per A2A spec Section 4.1.4
   const message = {
     kind: 'message',
     messageId,
     role: 'user',
-    parts: [{ kind: 'text', text: userText }],
+    parts: [{ kind: 'text', text: textWithContext }],
   };
 
   // For follow-ups: contextId and taskId go INSIDE the message object

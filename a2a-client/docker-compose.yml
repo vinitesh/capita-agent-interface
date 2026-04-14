@@ -4,13 +4,8 @@ services:
     build: ./backend
     ports:
       - "3001:3001"
-    environment:
-      - PORT=3001
-      - DYNAMODB_TABLE=a2a-chat-sessions
-      - AGENT_HISTORY_TABLE=a2a-agent-history
-      - AWS_REGION=us-east-1
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    env_file:
+      - ./backend/.env
     networks:
       - app-network
 

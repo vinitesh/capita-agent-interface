@@ -6,7 +6,7 @@ const router = express.Router();
 
 // POST / — Send a message to an A2A agent and persist the exchange
 router.post('/', async (req, res) => {
-  const { agentUrl, contextId, userText, taskId, agentName } = req.body;
+  const { agentUrl, contextId, userText, taskId, agentName, webhookContextId } = req.body;
 
   if (!agentUrl || !contextId || !userText) {
     return res.status(400).json({
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 
   let result;
   try {
-    result = await a2aClient.sendMessage({ agentUrl, contextId, taskId, userText });
+    result = await a2aClient.sendMessage({ agentUrl, contextId, taskId, userText, webhookContextId });
   } catch (err) {
     console.error('A2A sendMessage error:', err.response?.status, err.response?.data || err.message);
     return res.status(502).json({

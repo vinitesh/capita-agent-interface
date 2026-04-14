@@ -25,19 +25,26 @@ const messageRouter = require('./routes/message');
 const webhookRouter = require('./routes/webhook');
 const sessionsRouter = require('./routes/sessions');
 const agentsRouter = require('./routes/agents');
+const authRouter = require('./routes/auth');
+const usersRouter = require('./routes/users');
 
 app.use('/api/discover', discoverRouter);
 app.use('/api/message', messageRouter);
 app.use('/webhook', webhookRouter(io));
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/agents', agentsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
 
 // Initialize Socket.io event handler
 initializeSocket(io);
 
 const PORT = process.env.PORT || 3001;
+const { seedDefaultAdmin } = require('./services/seedAdmin');
+
 server.listen(PORT, () => {
   console.log(`Backend server listening on port ${PORT}`);
+  seedDefaultAdmin();
 });
 
 module.exports = { app, server, io };
