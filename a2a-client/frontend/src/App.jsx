@@ -80,7 +80,7 @@ function AppContent() {
         contextId: contextIdRef.current,
         userText: text,
         taskId: activeTaskIdRef.current,
-        agentName: agentCardRef.current?.name,
+        agentName: agentCardRef.current?.name || agentCard?.name || 'Unknown Agent',
         webhookContextId: webhookContextIdRef.current,
       });
       addMessage({ role: 'agent', text: result.text });
@@ -110,6 +110,7 @@ function AppContent() {
       disconnect();
       connect(session.contextId, onProgressUpdate);
       contextIdRef.current = session.contextId;
+      webhookContextIdRef.current = session.contextId; // restored session uses its own contextId as webhook key
       activeTaskIdRef.current = session.activeTaskId || null;
       const card = await api.discoverAgent(session.agentUrl);
       setAgentCard(card);

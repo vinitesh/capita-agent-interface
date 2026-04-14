@@ -25,10 +25,10 @@ router.post('/', async (req, res) => {
     });
   }
 
-  // Persist the exchange to DynamoDB (non-blocking on failure)
+  // Persist the exchange to DynamoDB using webhookContextId as the session key
   try {
     await dynamodb.saveMessages({
-      contextId,
+      contextId: webhookContextId || contextId,
       agentUrl,
       agentName: agentName || 'Unknown Agent',
       userMessage: userText,
