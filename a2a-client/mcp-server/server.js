@@ -4,7 +4,7 @@ import express from "express";
 import { z } from "zod";
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || "http://api:3001/webhook";
-const PORT = process.env.MCP_PORT || 3002;
+const PORT = process.env.MCP_PORT || 8080;
 
 const server = new McpServer({
   name: "a2a-webhook-mcp",
