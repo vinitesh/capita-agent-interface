@@ -1,4 +1,7 @@
 require('dotenv').config();
+// Force stdout/stderr to flush immediately in Docker
+if (process.stdout._handle) process.stdout._handle.setBlocking(true);
+if (process.stderr._handle) process.stderr._handle.setBlocking(true);
 const express = require('express');
 const cors = require('cors');
 const http = require('http');

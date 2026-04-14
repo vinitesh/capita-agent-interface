@@ -53,9 +53,9 @@ async function sendMessage({ agentUrl, contextId, taskId, userText, webhookConte
     params,
   };
 
-  console.log('Sending A2A payload:', JSON.stringify(payload, null, 2));
+  console.error('Sending A2A payload:', JSON.stringify(payload, null, 2));
   const response = await axios.post(agentUrl, payload);
-  console.log('A2A response:', JSON.stringify(response.data, null, 2));
+  console.error('A2A response:', JSON.stringify(response.data, null, 2));
 
   return parseA2AResponse(response.data, contextId);
 }
