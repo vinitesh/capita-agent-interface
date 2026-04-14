@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const DEFAULT_VISIBLE = 5;
 
 function formatDate(dateString) {
   if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleString();
+  return new Date(dateString).toLocaleString();
 }
 
 function truncate(text, maxLength = 50) {
@@ -12,6 +13,8 @@ function truncate(text, maxLength = 50) {
 }
 
 export default function SessionList({ sessions, onSessionSelect }) {
+  const [showAll, setShowAll] = useState(false);
+
   if (!sessions || sessions.length === 0) {
     return (
       <div className="session-list">
@@ -21,11 +24,14 @@ export default function SessionList({ sessions, onSessionSelect }) {
     );
   }
 
+  const visible = showAll ? sessions : sessions.slice(0, DEFAULT_VISIBLE);
+  const hasMore = sessions.length > DEFAULT_VISIBLE;
+
   return (
     <div className="session-list">
       <h4 className="session-list-title">Sessions</h4>
       <ul className="session-list-items">
-        {sessions.map((session) => (
+        {visible.map((session) => (
           <li
             key={session.contextId}
             className="session-list-item"
@@ -37,6 +43,14 @@ export default function SessionList({ sessions, onSessionSelect }) {
           </li>
         ))}
       </ul>
+      {hasMore && (
+        <button
+          className="session-list-toggle"
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? 'Show less' : `View all (${sessions.length})`}
+        </button>
+      )}
     </div>
   );
 }
