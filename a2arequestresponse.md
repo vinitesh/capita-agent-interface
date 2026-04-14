@@ -1,0 +1,14 @@
+request1: {"id":"1","jsonrpc":"2.0","method":"message/send","params":{"message":{"kind":"message","messageId":"440aa490-0672-4c59-9917-efda2d26f1c7","parts":[{"kind":"text","text":"```Hi, get me customer details for NHS Direct from crm```\n\n\nNOTE: For any tool requesting a context id please pass D09QLK530G01776160817.018689"}],"role":"user"}}}
+
+response1:{"id":"1","jsonrpc":"2.0","result":{"artifacts":[{"artifactId":"e9b4a2ae-cd05-4568-998a-dfb85dece9cd","parts":[{"kind":"text","text":"Customer details from CRM for **NHS Direct**:\n- **Account ID:** 001Hu00003cJxyXIAS\n- **Name:** NHS Direct\n- **Type:** Customer\n- **Phone:** 0208232897\n- **Billing Address:** 123 Street Number, London, 12345, GB"}]}],"contextId":"a43ac5af-a84d-493d-8ff2-dfb7f5520386","history":[],"id":"72e1a34e-11ec-4937-ae7f-2dcb586531e3","kind":"task","status":{"state":"completed","timestamp":"2026-04-14T10:00:34.370917148Z"}}}
+
+
+request2: {"id":"2","jsonrpc":"2.0","method":"message/send","params":{"message":{"kind":"message","messageId":"85c293b3-992f-4557-9f42-dcdec0c0878f","parts":[{"kind":"text","text":"create lead for vinitesh gulati\n\nNOTE: For any tool requesting a context id please pass D09QLK530G01776160817.018689"}],"role":"user"}}}
+
+
+respopnse2:{"id":"2","jsonrpc":"2.0","result":{"artifacts":[],"contextId":"1d901530-1af6-4242-bf83-75fee7de844e","history":[],"id":"76a0b498-101c-4a1b-8e89-f79f4e01be7e","kind":"task","status":{"message":{"kind":"message","messageId":"1789f8aa-3554-4e47-ae51-c04dc5a63012","parts":[{"kind":"text","text":"I can create the lead for Vinitesh Gulati, but I need at least an email address (required). If available, please also share company name and phone number."}],"role":"agent","taskId":"76a0b498-101c-4a1b-8e89-f79f4e01be7e"},"state":"input-required","timestamp":"2026-04-14T10:02:09.59114612Z"}}}
+
+
+request3: {"id":"3","jsonrpc":"2.0","method":"message/send","params":{"message":{"contextId":"1d901530-1af6-4242-bf83-75fee7de844e","kind":"message","messageId":"cc12c868-767c-4470-8963-ff179bb1b577","parts":[{"kind":"text","text":"<mailto:vsdfsdf@dsfsdf.com|vsdfsdf@dsfsdf.com>\n\nNOTE: For any tool requesting a context id please pass D09QLK530G01776160817.018689"}],"role":"user","taskId":"76a0b498-101c-4a1b-8e89-f79f4e01be7e"}}}
+
+response3: {"id":"3","jsonrpc":"2.0","result":{"artifacts":[{"artifactId":"d119f116-c66a-473c-a118-2ef4f9337dd8","parts":[{"kind":"text","text":"Lead created successfully for Vinitesh Gulati.\n- Email: vsdfsdf@dsfsdf.com\n- Lead ID: 470912953055"}]}],"contextId":"1d901530-1af6-4242-bf83-75fee7de844e","history":[],"id":"76a0b498-101c-4a1b-8e89-f79f4e01be7e","kind":"task","status":{"state":"completed","timestamp":"2026-04-14T10:03:24.27783616Z"}}}
