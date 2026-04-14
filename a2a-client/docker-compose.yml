@@ -24,10 +24,10 @@ services:
   mcp:
     build: ./mcp-server
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       - WEBHOOK_URL=http://api:3001/webhook
-      - MCP_PORT=8080
+      - MCP_PORT=8081
     depends_on:
       - api
     networks:
