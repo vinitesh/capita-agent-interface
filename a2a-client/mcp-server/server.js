@@ -1,13 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import express from "express";
 import { z } from "zod";
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || "http://api:3001/webhook";
-const PORT = process.env.MCP_PORT || 8080;
-
-// Track active transports by session ID
-const transports = new Map();
+const PORT = parseInt(process.env.MCP_PORT || "8080", 10);
 
 function createServer() {
   const server = new McpServer({
@@ -56,37 +53,29 @@ function createServer() {
 const app = express();
 app.use(express.json());
 
-app.get("/mcp", async (_req, res) => {
-  console.error("New SSE connection");
-  const transport = new SSEServerTransport("/messages", res);
-  const sessionId = transport.sessionId;
-  transports.set(sessionId, transport);
-
+// Stateless StreamableHTTP — each POST creates a fresh server+transport
+app.post("/mcp", async (req, res) => {
+  console.error("MCP request received");
   const server = createServer();
-  await server.connect(transport);
-
-  res.on("close", () => {
-    console.error(`SSE connection closed: ${sessionId}`);
-    transports.delete(sessionId);
-    server.close();
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined, // stateless mode
   });
+  await server.connect(transport);
+  await transport.handleRequest(req, res, req.body);
+  await server.close();
 });
 
-app.post("/messages", async (req, res) => {
-  const sessionId = req.query.sessionId;
-  const transport = transports.get(sessionId);
-  if (!transport) {
-    return res.status(400).json({ error: "No active SSE connection for this session" });
-  }
-  await transport.handlePostMessage(req, res);
+// GET /mcp for SSE streaming (optional, for clients that need it)
+app.get("/mcp", async (req, res) => {
+  res.status(405).json({ error: "Use POST /mcp for MCP requests" });
 });
 
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok", name: "a2a-webhook-mcp", activeSessions: transports.size });
+  res.json({ status: "ok", name: "a2a-webhook-mcp", port: PORT });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.error(`MCP webhook server running on port ${PORT}`);
-  console.error(`SSE endpoint: http://localhost:${PORT}/mcp`);
+  console.error(`MCP endpoint: http://localhost:${PORT}/mcp`);
   console.error(`Webhook target: ${WEBHOOK_URL}`);
 });
