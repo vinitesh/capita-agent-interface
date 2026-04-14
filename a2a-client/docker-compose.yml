@@ -21,6 +21,18 @@ services:
     networks:
       - app-network
 
+  mcp:
+    build: ./mcp-server
+    ports:
+      - "3002:3002"
+    environment:
+      - WEBHOOK_URL=http://api:3001/webhook
+      - MCP_PORT=3002
+    depends_on:
+      - api
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

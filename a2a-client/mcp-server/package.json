@@ -1,0 +1,14 @@
+{
+  "name": "a2a-mcp-webhook-server",
+  "version": "1.0.0",
+  "description": "MCP server providing set-status tool for A2A webhook progress updates",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.22.4",
+    "express": "^4.18.2"
+  }
+}
