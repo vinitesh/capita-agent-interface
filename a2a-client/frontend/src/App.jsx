@@ -40,6 +40,8 @@ function AppContent() {
   const activeTaskIdRef = useRef(activeTaskId);
   const agentUrlRef = useRef(agentUrl);
   const agentCardRef = useRef(agentCard);
+  // webhookContextId is our local Socket.io room ID — stays fixed for the whole chat session
+  const webhookContextIdRef = useRef(null);
 
   useEffect(() => { contextIdRef.current = contextId; }, [contextId]);
   useEffect(() => { activeTaskIdRef.current = activeTaskId; }, [activeTaskId]);
@@ -59,6 +61,7 @@ function AppContent() {
       const newContextId = uuidv4();
       setContextId(newContextId);
       contextIdRef.current = newContextId;
+      webhookContextIdRef.current = newContextId; // fixed for this chat session
       connect(newContextId, onProgressUpdate);
       const sessionList = await api.listSessions();
       setSessions(sessionList);
@@ -78,7 +81,7 @@ function AppContent() {
         userText: text,
         taskId: activeTaskIdRef.current,
         agentName: agentCardRef.current?.name,
-        webhookContextId: contextIdRef.current,
+        webhookContextId: webhookContextIdRef.current,
       });
       addMessage({ role: 'agent', text: result.text });
       setAgentStatus(null);
@@ -121,6 +124,7 @@ function AppContent() {
     const newContextId = uuidv4();
     setContextId(newContextId);
     contextIdRef.current = newContextId;
+    webhookContextIdRef.current = newContextId; // new fixed webhook context for this chat
     setActiveTask(null, false);
     activeTaskIdRef.current = null;
     setAgentStatus(null);

@@ -40,6 +40,12 @@ async function sendMessage({ agentUrl, contextId, taskId, userText, webhookConte
     message,
   };
 
+  // Always pass contextId at params level when we have a server-assigned one
+  // This ensures the A2A server continues the same conversation context
+  if (contextId) {
+    params.contextId = contextId;
+  }
+
   const payload = {
     jsonrpc: '2.0',
     id: messageId,
