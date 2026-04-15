@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   api:
+    image: a2a-client-api:${APP_VERSION:-v1}
     build: ./backend
     ports:
       - "3001:3001"
@@ -10,6 +11,7 @@ services:
       - app-network
 
   web:
+    image: a2a-client-web:${APP_VERSION:-v1}
     build:
       context: ./frontend
       args:
@@ -22,6 +24,7 @@ services:
       - app-network
 
   mcp:
+    image: a2a-client-mcp:${APP_VERSION:-v1}
     build: ./mcp-server
     ports:
       - "8081:8081"

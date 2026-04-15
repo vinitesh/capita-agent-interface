@@ -109,10 +109,14 @@ function AppContent() {
   const handleSessionSelect = async (selectedContextId) => {
     try {
       const session = await api.getSession(selectedContextId);
-      restoreSession(session);
+      const restoredAgentContextId = session.agentContextId || session.contextId;
+      restoreSession({
+        ...session,
+        contextId: restoredAgentContextId,
+      });
       disconnect();
       connect(session.contextId, onProgressUpdate);
-      contextIdRef.current = session.contextId;
+      contextIdRef.current = restoredAgentContextId;
       webhookContextIdRef.current = session.contextId; // restored session uses its own contextId as webhook key
       activeTaskIdRef.current = session.activeTaskId || null;
       const card = await api.discoverAgent(session.agentUrl);

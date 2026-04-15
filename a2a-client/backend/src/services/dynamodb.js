@@ -18,6 +18,7 @@ async function saveMessages({
   contextId,
   agentUrl,
   agentName,
+  agentContextId,
   userMessage,
   agentMessage,
   activeTaskId,
@@ -37,6 +38,7 @@ async function saveMessages({
       'updatedAt = :now, ' +
       'agentUrl = :agentUrl, ' +
       'agentName = :agentName, ' +
+      'agentContextId = :agentContextId, ' +
       'activeTaskId = :activeTaskId, ' +
       'isInputRequired = :isInputRequired',
     ExpressionAttributeValues: {
@@ -45,6 +47,7 @@ async function saveMessages({
       ':now': now,
       ':agentUrl': agentUrl,
       ':agentName': agentName,
+      ':agentContextId': agentContextId || contextId,
       ':activeTaskId': activeTaskId || null,
       ':isInputRequired': !!isInputRequired,
     },

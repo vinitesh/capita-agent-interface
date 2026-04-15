@@ -43,6 +43,7 @@ router.post('/', async (req, res) => {
       contextId: webhookContextId || contextId,
       agentUrl,
       agentName: resolvedAgentName || 'Unknown Agent',
+      agentContextId: result.contextId || contextId,
       userMessage: userText,
       agentMessage: result.text,
       activeTaskId: result.state === 'input-required' ? result.taskId : null,
