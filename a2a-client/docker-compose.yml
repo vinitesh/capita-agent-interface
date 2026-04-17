@@ -7,6 +7,9 @@ services:
       - "3001:3001"
     env_file:
       - ./backend/.env
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     networks:
       - app-network
 
